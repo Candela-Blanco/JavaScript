@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1 id="titulo">Aprendiendo a manejar el DOM</h1>
+</body>
+
+<script>
+    function crearTabla(datos) {
+        // Crear la tabla
+        const tabla = document.createElement('table')
+        tabla.border = '1'
+        tabla.style.borderCollapse = 'collapse'
+
+        // Crear el encabezado de la tabla
+        const head = document.createElement('thead')
+        const filaCabecera = document.createElement('tr')
+
+        for (let propiedad in datos[0]) {
+            const th = document.createElement('th');
+            th.textContent = propiedad.replace(/\b\w/g, function (letra) {
+                return letra.toUpperCase();
+            });;
+            th.style.padding = '8px'
+            filaCabecera.appendChild(th)
+        }
+        head.appendChild(filaCabecera)
+        tabla.appendChild(head)
+
+        // Crear Cuerpo de la tabla
+        const body = document.createElement('tbody')
+
+        datos.map(item => {
+            const fila = document.createElement('tr')
+            for (let propiedad in item) {
+                const celda = document.createElement('td')
+                celda.textContent = item[propiedad]
+                celda.style.padding = '8px'
+                fila.appendChild(celda)
+            }
+            body.appendChild(fila)
+        })
+        tabla.appendChild(body)
+        document.body.appendChild(tabla)
+        return tabla
+    }
+    const estudiantes = [
+        { nombre: 'Juan', apellido: 'Pérez', edad: 25 },
+        { nombre: 'María', apellido: 'García', edad: 28 },
+        { nombre: 'Pedro', apellido: 'Sánchez', edad: 30 }
+    ]
+    const miTabla = crearTabla(estudiantes)
+
+</script>
+
+</html>
