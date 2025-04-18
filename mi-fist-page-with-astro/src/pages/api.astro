@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+async function getUsers() {
+    const response = await fetch("http://localhost:5000/api/users");
+    if (!response.ok) {
+        throw new Error("Chavo del 7 fallaron los usurarios");
+    }
+    return await response.json();
+}
+
+const users = await getUsers();
+---
+
+<Layout>
+    <div>
+        <ul>
+            {
+                users.map((user) => {
+                    return (
+                        <li>
+                            <h2>{user.name}</h2>
+                            <p>{user.email}</p>
+                        </li>
+                    );
+                })
+            }
+        </ul>
+    </div>
+</Layout>

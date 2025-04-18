@@ -1,0 +1,46 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "Juan P\u00e9rez",
+            "email": "juan@ejemplo.com",
+            "age": 28
+        },
+        {
+            "id": 2,
+            "name": "Mar\u00eda L\u00f3pez",
+            "email": "maria@ejemplo.com",
+            "age": 32
+        },
+        {
+            "id": 3,
+            "name": "Carlos Rodr\u00edguez",
+            "email": "carlos@ejemplo.com",
+            "age": 25
+        },
+        {
+            "name": "cande",
+            "email": "candenerab@gmail.com",
+            "age": 23,
+            "id": 4
+        },
+        {
+            "name": "yoezequiel",
+            "email": "candenerab@gmail.com",
+            "age": 23,
+            "id": 5
+        },
+        {
+            "name": "dasda",
+            "email": "dsads",
+            "age": "12",
+            "id": 6
+        },
+        {
+            "name": "Casiano Ezequiel",
+            "email": "ezequielcasiano15@gmail.com",
+            "age": "123213",
+            "id": 7
+        }
+    ]
+}

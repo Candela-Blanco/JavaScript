@@ -1,0 +1,129 @@
+---
+import Layout from "../Layout/Layout.astro";
+---
+
+<Layout>
+    <main>
+        <div id="status-message" style="display:none"></div>
+        <div class="container">
+            <div class="container-form">
+                <h2 id="form-title">Agregar Usuario</h2>
+                <form id="user-form">
+                    <input type="hidden" id="user-id" />
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" />
+                    <label for="edad">Edad</label>
+                    <input type="text" id="edad" />
+                    <button type="submit" id="submit-btn">Guardar</button>
+                    <button type="button" style="display: none;" id="cancel-btn"
+                        >Cancelar</button
+                    >
+                </form>
+            </div>
+            <div class="container-table">
+                <table id="users-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Edad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-list">
+                        <tr>
+                            <th colspan="4">Cargando Usuarios...</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</Layout>
+<script>
+    interface Usuario {
+        id: string;
+        nombre: string;
+        edad: number;
+    }
+    import $ from "../utils/dom";
+    const API_URL = "http://localhost:3000/api/usuarios";
+
+    const userForm = $("user-form") as HTMLFormElement;
+    const usersList = $("users-list");
+    const formTitle = $("form-title");
+    const submitBtn = $("submit-btn");
+    const cancelBtn = $("cancel-btn");
+    const userIdInput = $("user-id") as HTMLInputElement;
+    const nombreInput = $("nombre") as HTMLInputElement;
+    const edadInput = $("edad") as HTMLInputElement;
+    const statusMessage = $("status-message");
+
+    document.addEventListener("DOMContentLoaded", fetchUsers);
+
+    userForm.addEventListener("submit", handleFormSubmit);
+
+    async function handleFormSubmit(e: Event) {
+        e.preventDefault();
+        const userData = {
+            nombre: nombreInput.value,
+            edad: parseInt(edadInput.value),
+        };
+        await createUser(userData);
+        resetForm();
+        fetchUsers();
+    }
+
+    async function fetchUsers() {
+        try {
+            const response = await fetch(API_URL);
+            if (!response.ok) {
+                throw new Error(
+                    `Error al obtener los usuarios: ${response.status}`
+                );
+            }
+            const users = await response.json();
+            renderUsers(users);
+        } catch (error) {
+            usersList.innerHTML =
+                '<tr><td colspan="4">Error al Cargar usuarios</td></tr>';
+        }
+    }
+
+    async function createUser(userData: { nombre: string; edad: number }) {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+        });
+        if (!response.ok) {
+            throw new Error(`Error al crear el usuario: ${response.status}`);
+        }
+        return await response.json();
+    }
+
+    function renderUsers(users: Usuario[]) {
+        if (users.length == 0) {
+            usersList.innerHTML =
+                '<tr><td colspan="4">No hay usuarios registrados</td></tr>';
+            return;
+        }
+        usersList.innerHTML = users
+            .map(
+                (user) => `
+		<tr>
+			<td>${user.id}</td>
+			<td>${user.nombre}</td>
+			<td>${user.edad}</td>
+		</tr>
+		`
+            )
+            .join("");
+    }
+    function resetForm() {
+        userForm.reset();
+        userIdInput.value = "";
+    }
+</script>

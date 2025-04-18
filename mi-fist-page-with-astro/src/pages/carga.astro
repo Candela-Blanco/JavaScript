@@ -1,0 +1,49 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+    <form method="post" id="form">
+        <label for="name">Nombre</label>
+        <input type="text" name="name" id="name" />
+
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email" />
+
+        <label for="age">Edad</label>
+        <input type="text" name="age" id="age" />
+
+        <button type="submit">Guardar Usuario</button>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("form") as HTMLFormElement;
+
+            form.addEventListener("submit", async (event) => {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+                const userData = {
+                    name: formData.get("name"),
+                    email: formData.get("email"),
+                    age: formData.get("age"),
+                };
+
+                const response = await fetch(
+                    "http://127.0.0.1:5000/api/users",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(userData),
+                    }
+                );
+                if (response.ok) {
+                    alert("Usuario guardado correctamente");
+                }
+            });
+        });
+    </script>
+</Layout>
